@@ -1,0 +1,45 @@
+<canvas id="ctx" width="500" height="500" style="border:1px solid #000000;"></canvas>
+
+<script src = "https://cdn.socket.io/socket.io-1.4.5.js"></script>
+<script>
+	var socket = io();
+	var itemPos = [];
+	var ctx = document.getElementById("ctx").getContext("2d");
+	ctx.font = '30px Arial';
+	
+	socket.on('newPos', function(data){
+		for(var i = 0; i < data.length; i++)
+			ctx.fillText('P(' + data[i].health + ')', data[i].x, data[i].y);
+			ctx.fillText('O', 100, 100);
+		});
+		
+	socket.on('drawItem', function(data){
+		for(var i = 0; i < data.length; i++){
+			if(data[i].enable)	ctx.fillText('O', data[i].x, data[i].y);
+		}
+	});
+		
+	document.onkeydown = function(event){
+		if(event.keyCode == 68) // d
+			socket.emit('keyPress', {inputId:'right', state:true});
+		if(event.keyCode == 83) // s
+			socket.emit('keyPress', {inputId:'down', state:true});
+		if(event.keyCode == 65) // a
+			socket.emit('keyPress', {inputId:'left', state:true});
+		if(event.keyCode == 87) // w
+			socket.emit('keyPress', {inputId:'up', state:true});
+		if(event.keyCode == 69) // e
+			socket.emit('deleteItem', {name:'delete'});
+	}
+	
+	document.onkeyup = function(event){
+		if(event.keyCode == 68) // d
+			socket.emit('keyPress', {inputId:'right', state:false});
+		if(event.keyCode == 83) // s
+			socket.emit('keyPress', {inputId:'down', state:false});
+		if(event.keyCode == 65) // a
+			socket.emit('keyPress', {inputId:'left', state:false});
+		if(event.keyCode == 87) // w
+			socket.emit('keyPress', {inputId:'up', state:false});
+	}
+</script>
