@@ -4,9 +4,9 @@ var app = express();
 var serv = require('http').Server(app);
 
 app.get('/', function(req, res) {
-	res.sendFile(_dirname + '/client/index.html');
+	res.sendFile('https://github.com/giammirove/digitus/blob/master/index.html');
 });
-app.use('client', express.static(_dirname+'/client'));
+app.use('client', express.static('https://github.com/giammirove/digitus'));
 
 serv.listen(2000);
 console.log('server started');
